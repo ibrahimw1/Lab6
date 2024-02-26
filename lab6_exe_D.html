@@ -47,11 +47,32 @@ Description : API Usage.
     <script>
         // Function to fetch and display students
         async function fetchStudents() {
+            const response = await fetch("https://65dcee11e7edadead7ed2057.mockapi.io/students");
+            const students = await response.json();
             
+            let result = ""
+            for(i=0; i<students.length;i++){
+
+                result += "<li onclick = \"fetchCourses(" + students[i].id+")\">" + students[i].name + "</li>\n"
+            }
+            document.getElementById('studentList').innerHTML = result
         }
 
         // Function to fetch and display courses for a student
         async function fetchCourses(studentId) {
+            const response = await fetch("https://65dcee11e7edadead7ed2057.mockapi.io/students/"+studentId+"/courses");
+            const courses = await response.json();
+            if(response.status == 404){
+                let message = "<li> Not Found </li>"
+                document.getElementById('courseList').innerHTML = message
+            }
+            else{
+                let result = ""
+                for(i=0; i<courses.length;i++){
+                    result += "<li>" + courses[i].name + " (Unit: "+ courses[i].unit + ") </li>\n"
+                }
+                document.getElementById('courseList').innerHTML = result
+            }
             
         }
 
